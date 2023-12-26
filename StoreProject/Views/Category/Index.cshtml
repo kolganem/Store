@@ -1,0 +1,47 @@
+@inject SignInManager<User> SignInManager
+
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<Category>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => Model.First().Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.First().Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (Category item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            @{
+                if (SignInManager.IsSignedIn(User))
+                {
+                    if (!User.IsInRole(Roles.User))
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-categoryId="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-categoryId="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-categoryId="@item.Id">Delete</a>
+                        </td>
+                    }
+                }
+            }
+        </tr>
+    }
+    </tbody>
+</table>

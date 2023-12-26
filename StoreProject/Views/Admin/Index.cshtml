@@ -1,0 +1,52 @@
+﻿@model IEnumerable<StoreProject.Models.UserRole>
+@{
+    var x = Model;
+}
+
+<p>
+    <a asp-action="CreateUser">Create New User</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => Model.First().User.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => Model.First().User.LockoutEnd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => Model.First().User.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => Model.First().Roles)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (UserRole item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.LockoutEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Roles)
+            </td>
+            @{
+                <td>
+                    <a asp-action="Lock" asp-route-userId="@item.User.Id">Lock</a> | 
+                    <a asp-action="ChangePassword" asp-route-userId="@item.User.Id">ChangePassword</a> |
+                    <a asp-action="Delete" asp-route-userId="@item.User.Id">Delete</a>
+                </td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,89 @@
+@inject SignInManager<User> SignInManager
+
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<Product>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => Model.First().Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.First().Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.First().Info)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.First().Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.First().GeneralNote)
+            </th>
+            @{
+                if (SignInManager.IsSignedIn(User) && !User.IsInRole(Roles.User))
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => Model.First().SpecialNote)
+                    </th>
+                }
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (Product item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Info)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GeneralNote)
+            </td>
+            @{
+                if (SignInManager.IsSignedIn(User) && !User.IsInRole(Roles.User))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SpecialNote)
+                    </td>
+                }
+            }
+            @{
+                if (SignInManager.IsSignedIn(User))
+                {
+                    if (User.IsInRole(Roles.User))
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-productId="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-productId="@item.Id">Details</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-productId="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-productId="@item.Id">Details</a>
+                            <a asp-action="Delete" asp-route-productId="@item.Id">Delete</a>
+                        </td>
+                    }
+                }
+            }
+        </tr>
+    }
+    </tbody>
+</table>

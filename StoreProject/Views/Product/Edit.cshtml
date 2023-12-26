@@ -1,0 +1,63 @@
+@using StoreProject.Infrastructure.Extensions
+@model StoreProject.Models.Product
+
+@{
+    var categoryValues = Enum.GetValues<Categories>();
+    var cat = categoryValues.Where(c => c != Categories.Default)
+        .Select(c => new Category
+        {
+            Id = (int)c,
+            Name = c.GetDisplayName()
+        })
+        .ToList();
+    var categories = new SelectList(cat, nameof(Category.Id), nameof(Category.Name));
+}
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Id" />
+            <div class="form-group">
+                <label asp-for="@Model.CategoryId" class="control-label"></label>
+                <select asp-for="@Model.CategoryId" class="form-control" asp-items="@categories"></select>
+                <span asp-validation-for="@Model.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Name" class="control-label"></label>
+                <input asp-for="@Model.Name" class="form-control" />
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Info" class="control-label"></label>
+                <input asp-for="@Model.Info" class="form-control" />
+                <span asp-validation-for="@Model.Info" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Price" class="control-label"></label>
+                <input asp-for="@Model.Price" class="form-control" />
+                <span asp-validation-for="@Model.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.GeneralNote" class="control-label"></label>
+                <input asp-for="@Model.GeneralNote" class="form-control" />
+                <span asp-validation-for="@Model.GeneralNote" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.SpecialNote" class="control-label"></label>
+                <input asp-for="@Model.SpecialNote" class="form-control" />
+                <span asp-validation-for="@Model.SpecialNote" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

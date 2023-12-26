@@ -1,0 +1,53 @@
+@model StoreProject.ViewModel.CreateProductViewModel
+
+@{
+    IEnumerable<SelectListItem> categories =
+        new SelectList(Model.PossibleCategories, nameof(Category.Id), nameof(Category.Name));
+}
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Product.CategoryId" class="control-label"></label>
+                <select asp-for="@Model.Product.CategoryId" class ="form-control" asp-items="@categories"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Product.Name" class="control-label"></label>
+                <input asp-for="@Model.Product.Name" class="form-control" />
+                <span asp-validation-for="@Model.Product.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Product.Info" class="control-label"></label>
+                <input asp-for="@Model.Product.Info" class="form-control" />
+                <span asp-validation-for="@Model.Product.Info" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Product.Price" class="control-label"></label>
+                <input asp-for="@Model.Product.Price" class="form-control" />
+                <span asp-validation-for="@Model.Product.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Product.GeneralNote" class="control-label"></label>
+                <input asp-for="@Model.Product.GeneralNote" class="form-control" />
+                <span asp-validation-for="@Model.Product.GeneralNote" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Product.SpecialNote" class="control-label"></label>
+                <input asp-for="@Model.Product.SpecialNote" class="form-control" />
+                <span asp-validation-for="@Model.Product.SpecialNote" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
