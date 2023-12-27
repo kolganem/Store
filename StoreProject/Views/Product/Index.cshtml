@@ -7,8 +7,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+<div id="vueApp">
+    <table class="table">
+        <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => Model.First().Category)
@@ -35,55 +36,83 @@
             }
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-    @foreach (Product item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Info)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GeneralNote)
-            </td>
-            @{
-                if (SignInManager.IsSignedIn(User) && !User.IsInRole(Roles.User))
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SpecialNote)
-                    </td>
-                }
-            }
-            @{
-                if (SignInManager.IsSignedIn(User))
-                {
-                    if (User.IsInRole(Roles.User))
+        </thead>
+        <tbody>
+        @foreach (Product item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Info)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                    <span v-on:click="getUSDPrice(`@item.Price`)">***</span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GeneralNote)
+                </td>
+                @{
+                    if (SignInManager.IsSignedIn(User) && !User.IsInRole(Roles.User))
                     {
                         <td>
-                            <a asp-action="Edit" asp-route-productId="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-productId="@item.Id">Details</a>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            <a asp-action="Edit" asp-route-productId="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-productId="@item.Id">Details</a>
-                            <a asp-action="Delete" asp-route-productId="@item.Id">Delete</a>
+                            @Html.DisplayFor(modelItem => item.SpecialNote)
                         </td>
                     }
                 }
+                @{
+                    if (SignInManager.IsSignedIn(User))
+                    {
+                        if (User.IsInRole(Roles.User))
+                        {
+                            <td>
+                                <a asp-action="Edit" asp-route-productId="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-productId="@item.Id">Details</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a asp-action="Edit" asp-route-productId="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-productId="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-productId="@item.Id">Delete</a>
+                            </td>
+                        }
+                    }
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script type="module">
+      import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+      
+      createApp({
+        data() {
+          return { }
+        },
+        methods:{
+            async getUSDPrice(value){
+                const response = await fetch('https://api.nbrb.by/exrates/rates/USD?parammode=2');
+                let rateJson = await response.json();
+                let result = value / rateJson.Cur_OfficialRate;
+                alert(`Price in USD -- ${result.toFixed(2)}`);
             }
-        </tr>
-    }
-    </tbody>
-</table>
+        }
+      }).mount('#vueApp')
+    </script>
+}
+
+
